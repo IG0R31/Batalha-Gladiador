@@ -15,13 +15,13 @@ public class Gladiador {
 
     //getters e setters
     public String getNome(){ return nome; }
-    public String setNome(){ return nome; }
+    public void setNome(String nome){ this.nome = nome; }
 
     public String getDescricao(){ return descricao; }
-    public  String setDescricao(String descricao){ this.descricao = descricao; }
+    public void setDescricao(String descricao){ this.descricao = descricao; }
 
     public int getBatalhasVencidas(){ return batalhasVencidas; }
-    public  String setBatalhasVencidas(int batalhasVencidas){ this.batalhasVencidas = batalhasVencidas; }
+    public void setBatalhasVencidas(int batalhasVencidas){ this.batalhasVencidas = batalhasVencidas; }
 
     public StatusGladiador getStatus(){ return status; }
     public void setStatus(StatusGladiador status){ this.status = status; }
