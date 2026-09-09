@@ -12,6 +12,8 @@ public class Gladiador {
         this.batalhasVencidas = 0;
         this.status = status;
     }
+
+    //getters e setters
     public String getNome(){ return nome; }
     public String setNome(){ return nome; }
 
