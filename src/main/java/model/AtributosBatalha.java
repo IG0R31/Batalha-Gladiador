@@ -1,7 +1,7 @@
 package model;
 import java.util.Random;
 
-public class AtributosBatalha {
+public class AtributosBatalha{
 
     private double forca;
     private double agilidade;
