@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalha de Gladiadores - Montar Personagem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { min-height: 100vh; background: #cdedb3; }
+        .titulo-montagem{
+            font-family: "EB Garamond", Garamond, serif;
+            font-weight: 700;
+        }
+        .img-escolha{
+            height: 160px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/principal}">BATALHA DE GLADIADORES</a>
+  </div>
+</nav>
+
+<div class="container py-5" style="max-width: 720px;">
+    <h1 class="titulo-montagem text-center mb-1">MONTE O SEU PERSONAGEM</h1>
+    <p class="text-center text-body-secondary mb-4">Custo: <span th:text="${custo}">250</span> créditos</p>
+
+    <div class="alert alert-danger py-2" th:if="${erro}" th:text="${erro}"></div>
+
+    <form th:action="@{/usuario/{usuarioId}/gladiador/salvar(usuarioId=${usuarioId})}" th:object="${gladiador}" method="post">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome do gladiador</label>
+            <input type="text" class="form-control" id="nome" th:field="*{nome}" placeholder="Ex.: Valentina" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição</label>
+            <textarea class="form-control" id="descricao" th:field="*{descricao}" rows="3"
+                      placeholder="A história do seu gladiador na arena"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="tier" class="form-label">Tier</label>
+            <select class="form-select" id="tier" th:field="*{tier}">
+                <option th:each="t : ${tiers}" th:value="${t}" th:text="${t}">BRONZE</option>
+            </select>
+            <div class="form-text">O tier define o fator aleatório dos atributos de batalha.</div>
+        </div>
+
+        <fieldset class="mb-4">
+            <legend class="form-label">Aparência</legend>
+            <div class="row row-cols-3 row-cols-md-4 g-3">
+                <div class="col" th:each="img, stat : ${imagens}">
+                    <label class="d-block text-center">
+                        <input type="radio" name="aparencia" th:value="${stat.count}" th:checked="${stat.first}" class="form-check-input mb-2">
+                        <img th:src="${img}" class="img-escolha d-block mx-auto" alt="Aparência">
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg">MONTAR GLADIADOR</button>
+            <a class="btn btn-link" th:href="@{/usuario/{id}(id=${usuarioId})}">Voltar</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</body>
+</html>

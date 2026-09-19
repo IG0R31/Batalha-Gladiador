@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalha de Gladiadores - Usuário</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .tela-usuario{
+            background-color: #cdedb3;
+        }
+        .titulo-usuario{
+            font-family: "EB Garamond", Garamond, serif;
+            font-weight: 700;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+        }
+        .titulo-secao{
+            font-family: "EB Garamond", Garamond, serif;
+            font-weight: 700;
+        }
+        .card-img-top{
+            height: 220px;
+            object-fit: contain;
+        }
+        .avatar-usuario{
+            width: 112px;
+            height: 112px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/principal}">BATALHA DE GLADIADORES</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+            <a class="nav-link" href="#">Github</a>
+            </li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Verificar
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" th:href="@{/ranking}">Ranking Geral</a></li>
+                <li><a class="dropdown-item" href="#">Histórico</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" th:href="@{/usuario/{id}(id=${usuario.id})}">Gladiadores</a></li>
+            </ul>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">versão 1.0</a>
+            </li>
+        </ul>
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar"/>
+            <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+        </form>
+        <form th:action="@{/logout}" method="post" class="ms-2">
+            <button class="btn btn-outline-danger" type="submit">Sair</button>
+        </form>
+        </div>
+    </div>
+</nav>
+
+<div class="tela-usuario py-5">
+    <div class="row justify-content-center">
+        <div class="col-sm-10 col-md-8">
+            <p class="titulo-usuario text-center mb-0">SEUS GLADIADORES</p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4 mb-5">
+        <!-- Card do usuário -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <img th:src="${@batalha_gladiadorController.imagemDe(4)}" class="avatar-usuario my-2" alt="Avatar do usuário">
+                    <h5 class="card-title mb-1" th:text="${usuario.nome}">Mestre da Arena</h5>
+                    <p class="card-text text-body-secondary mb-2" th:text="${usuario.email}">mestre@uel.com</p>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-body-secondary">Gladiadores: <span th:text="${#lists.size(gladiadores)}">0</span></small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Créditos ao lado do card -->
+        <div class="col-md-6">
+            <div class="card h-100 text-bg-success">
+                <div class="card-body text-center d-flex flex-column justify-content-center">
+                    <small class="text-uppercase opacity-75 mb-2">Créditos Totais</small>
+                    <p class="display-4 fw-bold mb-1" th:text="${usuario.creditos}">1.250</p>
+                    <span class="badge text-bg-light align-self-center">Disponíveis para a arena</span>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista dos personagens feitos -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="titulo-secao mb-0">Personagens feitos</h2>
+        <a class="btn btn-primary" th:href="@{/usuario/{id}/gladiador/novo(id=${usuario.id})}">Montar personagem (250 Créditos)</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="g : ${gladiadores}">
+            <div class="card h-100">
+                <img th:src="${@batalha_gladiadorController.imagemDe(g.aparencia)}" class="card-img-top" alt="Gladiador">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${g.nome}">Nome</h5>
+                    <p class="card-text" th:text="${g.descricao}">Descrição</p>
+                    <span class="badge text-bg-warning" th:text="${g.tier}">BRONZE</span>
+                    <span class="badge text-bg-light border" th:text="${g.status}">VIVO</span>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <small class="text-body-secondary">Batalhas vencidas: <span th:text="${g.batalhasVencidas}">0</span></small>
+                    <div>
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{/gladiador/{id}(id=${g.id})}">Editar</a>
+                        <form th:action="@{/gladiador/{id}/deletar(id=${g.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="usuarioId" th:value="${usuario.id}">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Deletar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</body>
+</html>
