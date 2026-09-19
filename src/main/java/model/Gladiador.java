@@ -2,10 +2,10 @@ package model;
 import java.util.Random;
 
 public class Gladiador {
+    private Long id;
     private String nome;
     private String descricao;
     private int batalhasVencidas;
-    private StatusGladiador status;
     private int aparencia;
     private Tier tier;
     private AtributosBatalha atributos;
