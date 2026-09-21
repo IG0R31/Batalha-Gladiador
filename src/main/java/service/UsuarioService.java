@@ -42,4 +42,11 @@ public class UsuarioService {
         if(usuario.isEmpty()){throw new IllegalArgumentException("nao encontrado");}
         return usuario.get();
     }
+
+    public int subtrairCreditos(Usuario usuario,int valor){
+        if(usuario.getCreditos()<valor){throw new IllegalArgumentException("SALDO INSUFICIENTE");}
+        usuario.setCreditos(usuario.getCreditos()-valor);
+        repository.save(usuario);
+        return usuario.getCreditos();
+    }
 }
