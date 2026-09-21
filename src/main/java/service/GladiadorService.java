@@ -9,6 +9,7 @@ import service.UsuarioService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 
 public class GladiadorService {
@@ -28,6 +29,7 @@ public class GladiadorService {
         this.gladiadorRepository = gladiadorRepository;
     }
 
+    Random random = new Random();
 
     public Gladiador criarGladiador(Long usuarioId, Gladiador gladiador){
         Optional <Usuario> usuario = usuarioRepository.findById(usuarioId);
@@ -65,7 +67,28 @@ public class GladiadorService {
 
     // Random decide;
     public Gladiador batalhar(Long idA, Long idB){
-     return null;
+     Gladiador Glad1 = pesquisarGladiador(idA);
+     Gladiador Glad2 = pesquisarGladiador(idB);
+     double glad1Range = (random.nextDouble(Glad1.getAtributos().getStatSum()))*(1+Glad1.getTierFactor());
+     double glad2Range = (random.nextDouble(Glad2.getAtributos().getStatSum()))*(1+Glad2.getTierFactor());
+
+     Gladiador vencedor=null;
+     Gladiador perdedor=null;
+    if (glad1Range > glad2Range){
+         vencedor = Glad1;
+         perdedor = Glad2;
+     }
+    else{//glad2 venceu:
+        vencedor = Glad2;
+        perdedor = Glad1;
+     }
+        vencedor.setBatalhasVencidas(vencedor.getBatalhasVencidas()+1);
+        perdedor.setStatus("MORTO");
+
+        gladiadorRepository.save(vencedor);
+        gladiadorRepository.save(perdedor);
+
+        return vencedor;
     }
     //vencedor +1 vitória, perdedor MORTO
 

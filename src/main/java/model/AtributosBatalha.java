@@ -50,7 +50,7 @@ public class AtributosBatalha{
     public double getAtaque(){return (10+(forca*0.10));}
     public double getHealth(){return (500+(3*stamina));}
     public double getCritico(){return (0.10+(0.02*(agilidade/2)));}
-
+    public double getStatSum(){return (forca + agilidade + stamina);}
 }
 
 
