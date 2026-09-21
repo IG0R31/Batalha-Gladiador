@@ -13,6 +13,11 @@ import java.util.Map;
 @Service
 public class batalha_gladiadorService {
     private final Map<String, Usuario> usuarios = new LinkedHashMap<>();
+    private final repository.GladiadorRepository gladiadorRepository;
+
+    public batalha_gladiadorService(repository.GladiadorRepository gladiadorRepository) {
+        this.gladiadorRepository = gladiadorRepository;
+    }
     //---Usuário---
     public Usuario criarUsuario(String nome, String email){
 
@@ -28,6 +33,15 @@ public class batalha_gladiadorService {
         Usuario usuario = new Usuario(nome, email);
         usuarios.put(email, usuario);
         return usuario;
+    }
+
+    //---Pesquisa---
+    //Busca gladiadores por parte do nome (global, todos os usuários)
+    public List<Gladiador> pesquisarPorNome(String nome){
+        if (nome == null || nome.isBlank()){
+            throw new IllegalArgumentException("Digite um nome para pesquisar.");
+        }
+        return gladiadorRepository.findByNomeContainingIgnoreCase(nome.trim());
     }
 
 }

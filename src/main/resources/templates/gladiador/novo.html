@@ -3,16 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batalha de Gladiadores - Montar Personagem</title>
+    <title>Batalha de Gladiadores - Monte seu Gladiador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { min-height: 100vh; background: #cdedb3; }
-        .titulo-montagem{
+        .tela-usuario{
+            background-color: #cdedb3;
+        }
+        .titulo-usuario{
             font-family: "EB Garamond", Garamond, serif;
             font-weight: 700;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+        }
+        .titulo-secao{
+            font-family: "EB Garamond", Garamond, serif;
+            font-weight: 700;
+        }
+        .card-img-top{
+            height: 220px;
+            object-fit: contain;
+        }
+        .avatar-usuario{
+            width: 112px;
+            height: 112px;
+            object-fit: contain;
         }
         .img-escolha{
             height: 160px;
@@ -24,54 +40,105 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" th:href="@{/principal}">BATALHA DE GLADIADORES</a>
-  </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+            <a class="nav-link" href="#">Github</a>
+            </li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Verificar
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" th:href="@{/ranking}">Ranking Geral</a></li>
+                <li><a class="dropdown-item" href="#">Histórico</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" th:href="@{/usuario/{id}(id=${usuario.id})}">Gladiadores</a></li>
+            </ul>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">versão 1.0</a>
+            </li>
+        </ul>
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar"/>
+            <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+        </form>
+        <form th:action="@{/logout}" method="post" class="ms-2">
+            <button class="btn btn-outline-danger" type="submit">Sair</button>
+        </form>
+        </div>
+    </div>
 </nav>
 
-<div class="container py-5" style="max-width: 720px;">
-    <h1 class="titulo-montagem text-center mb-1">MONTE O SEU PERSONAGEM</h1>
-    <p class="text-center text-body-secondary mb-4">Custo: <span th:text="${custo}">250</span> créditos</p>
-
-    <div class="alert alert-danger py-2" th:if="${erro}" th:text="${erro}"></div>
-
-    <form th:action="@{/usuario/{usuarioId}/gladiador/salvar(usuarioId=${usuarioId})}" th:object="${gladiador}" method="post">
-        <div class="mb-3">
-            <label for="nome" class="form-label">Nome do gladiador</label>
-            <input type="text" class="form-control" id="nome" th:field="*{nome}" placeholder="Ex.: Valentina" required>
+<div class="tela-usuario py-5">
+    <div class="row justify-content-center">
+        <div class="col-sm-10 col-md-8">
+            <p class="titulo-usuario text-center mb-0">MONTE SEU GLADIADOR</p>
         </div>
-
-        <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" th:field="*{descricao}" rows="3"
-                      placeholder="A história do seu gladiador na arena"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label for="tier" class="form-label">Tier</label>
-            <select class="form-select" id="tier" th:field="*{tier}">
-                <option th:each="t : ${tiers}" th:value="${t}" th:text="${t}">BRONZE</option>
-            </select>
-            <div class="form-text">O tier define o fator aleatório dos atributos de batalha.</div>
-        </div>
-
-        <fieldset class="mb-4">
-            <legend class="form-label">Aparência</legend>
-            <div class="row row-cols-3 row-cols-md-4 g-3">
-                <div class="col" th:each="img, stat : ${imagens}">
-                    <label class="d-block text-center">
-                        <input type="radio" name="aparencia" th:value="${stat.count}" th:checked="${stat.first}" class="form-check-input mb-2">
-                        <img th:src="${img}" class="img-escolha d-block mx-auto" alt="Aparência">
-                    </label>
-                </div>
-            </div>
-        </fieldset>
-
-        <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary btn-lg">MONTAR GLADIADOR</button>
-            <a class="btn btn-link" th:href="@{/usuario/{id}(id=${usuarioId})}">Voltar</a>
-        </div>
-    </form>
+    </div>
 </div>
 
+<div class="container py-4">
+    <div class="row g-4 mb-5">
+        <!-- Card do usuário (dados do banco) -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <img th:src="${@batalha_gladiadorController.imagemDe(4)}" class="avatar-usuario my-2" alt="Avatar do usuário">
+                    <h5 class="card-title mb-1" th:text="${usuario.nome}">Mestre da Arena</h5>
+                    <p class="card-text text-body-secondary mb-2" th:text="${usuario.email}">mestre@uel.com</p>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-body-secondary">Créditos disponíveis: <span th:text="${usuario.creditos}">0</span></small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário que cadastra o gladiador no banco -->
+        <div class="col-md-6">
+            <div class="alert alert-danger py-2" th:if="${erro}" th:text="${erro}"></div>
+
+            <form th:action="@{/usuario/{usuarioId}/gladiador/salvar(usuarioId=${usuarioId})}" th:object="${gladiador}" method="post">
+                <div class="mb-3">
+                    <label for="nomeGladiadorExample1" class="form-label">Nome do Gladiador</label>
+                    <input type="text" class="form-control" id="nomeGladiadorExample1" th:field="*{nome}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="descricaoExample1" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="descricaoExample1" th:field="*{descricao}" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="tierExample1" class="form-label">Tier</label>
+                    <select class="form-select" id="tierExample1" th:field="*{tier}">
+                        <option th:each="t : ${tiers}" th:value="${t}" th:text="${t}">BRONZE</option>
+                    </select>
+                    <div class="form-text">O tier define o fator aleatório dos atributos de batalha. Custo: <span th:text="${custo}">250</span> créditos.</div>
+                </div>
+
+                <fieldset class="mb-3">
+                    <legend class="form-label">Aparência</legend>
+                    <div class="row row-cols-3 row-cols-md-4 g-3">
+                        <div class="col" th:each="img, stat : ${imagens}">
+                            <label class="d-block text-center">
+                                <input type="radio" name="aparencia" th:value="${stat.count}" th:checked="${stat.first}" class="form-check-input mb-2">
+                                <img th:src="${img}" class="img-escolha d-block mx-auto" alt="Aparência">
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Criar</button>
+                    <a class="btn btn-outline-danger" th:href="@{/usuario/{id}(id=${usuarioId})}">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
 </body>

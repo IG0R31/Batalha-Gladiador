@@ -138,6 +138,7 @@ public class batalha_gladiadorController {
     public String novoGladiador(@PathVariable Long usuarioId, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
         model.addAttribute("gladiador", new Gladiador());
+        model.addAttribute("usuario", service.buscarUsuario(usuarioId));
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("tiers", Gladiador.Tier.values());
         List<String> imagens = new java.util.ArrayList<>();
@@ -154,7 +155,16 @@ public class batalha_gladiadorController {
             service.criarGladiador(usuarioId, gladiador);
             return "redirect:/usuario/" + usuarioId;
         } catch (IllegalArgumentException e) {
+            //reabre o formulário com os mesmos dados do GET + a mensagem de erro
             model.addAttribute("erro", e.getMessage());
+            model.addAttribute("gladiador", gladiador);
+            model.addAttribute("usuario", service.buscarUsuario(usuarioId));
+            model.addAttribute("usuarioId", usuarioId);
+            model.addAttribute("tiers", Gladiador.Tier.values());
+            List<String> imagens = new java.util.ArrayList<>();
+            for (String img : IMAGENS_PERSONAGENS) imagens.add("/img/personagens/" + img);
+            model.addAttribute("imagens", imagens);
+            model.addAttribute("custo", batalha_gladiadorService.CUSTO_GLADIADOR);
             return "gladiador/novo";
         }
     }
@@ -179,6 +189,21 @@ public class batalha_gladiadorController {
         if (!logado(session)) return "redirect:/login";
         gladiadorservice.deletarGladiador(id);
         return "redirect:/usuario/" + usuarioId;
+    }
+
+    // ---------- Pesquisa ----------
+
+    //Rota chamada pelas barras de pesquisa: /pesquisar?q=termo
+    @GetMapping("/pesquisar")
+    public String pesquisar(@RequestParam String q, HttpSession session, Model model){
+        if (!logado(session)) return "redirect:/login";
+        model.addAttribute("termo", q);
+        try {
+            model.addAttribute("resultados", service.pesquisarPorNome(q));
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("erro", e.getMessage());
+        }
+        return "pesquisa";
     }
 
     // ---------- Auxiliares de sessão ----------

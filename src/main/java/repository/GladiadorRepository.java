@@ -15,4 +15,7 @@ public interface GladiadorRepository extends JpaRepository<Gladiador, Long> {
 
     //Ranking: maior número de batalhas vencidas primeiro
     List<Gladiador> findByOrderByBatalhasVencidasDesc();
+
+    //Busca por parte do nome, ignorando maiúsculas/minúsculas
+    List<Gladiador> findByNomeContainingIgnoreCase(String nome);
 }

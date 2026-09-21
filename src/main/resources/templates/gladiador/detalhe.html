@@ -36,14 +36,12 @@
                 <span class="badge text-bg-light border">Batalhas vencidas: <span th:text="${gladiador.batalhasVencidas}">0</span></span>
             </div>
 
-            <!-- Atributos de batalha (sorteados na criação, conforme o tier) -->
+            <!-- Atributos de batalha (sorteados na criação, conforme o tier).
+                 São exatamente estes três valores que a batalha compara (com fator de sorte). -->
             <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between">Força <strong th:text="${#numbers.formatDecimal(gladiador.atributos.forca, 1, 1)}">100</strong></li>
                 <li class="list-group-item d-flex justify-content-between">Agilidade <strong th:text="${#numbers.formatDecimal(gladiador.atributos.agilidade, 1, 1)}">50</strong></li>
                 <li class="list-group-item d-flex justify-content-between">Stamina <strong th:text="${#numbers.formatDecimal(gladiador.atributos.stamina, 1, 1)}">75</strong></li>
-                <li class="list-group-item d-flex justify-content-between">Ataque <strong th:text="${#numbers.formatDecimal(gladiador.atributos.ataque, 1, 1)}">10</strong></li>
-                <li class="list-group-item d-flex justify-content-between">Vida <strong th:text="${#numbers.formatDecimal(gladiador.atributos.health, 1, 1)}">500</strong></li>
-                <li class="list-group-item d-flex justify-content-between">Crítico <strong th:text="${#numbers.formatPercent(gladiador.atributos.critico, 1, 1)}">10%</strong></li>
             </ul>
         </div>
     </div>

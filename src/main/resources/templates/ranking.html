@@ -55,6 +55,10 @@
           <a class="nav-link disabled" aria-disabled="true">versão 1.0</a>
         </li>
       </ul>
+      <form class="d-flex" role="search" th:action="@{/pesquisar}" method="get">
+        <input class="form-control me-2" type="search" name="q" placeholder="Pesquisar gladiador" aria-label="Pesquisar"/>
+        <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+      </form>
       <form th:action="@{/logout}" method="post" class="ms-2">
         <button class="btn btn-outline-danger" type="submit">Sair</button>
       </form>
