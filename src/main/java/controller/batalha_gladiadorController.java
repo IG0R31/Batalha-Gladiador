@@ -5,10 +5,12 @@ import model.Usuario;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import service.batalha_gladiadorService;
+import service.UsuarioService;
+import service.GladiadorService;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
+
 
 
 @Controller
@@ -22,10 +24,12 @@ public class batalha_gladiadorController {
             "M1-lutador.png", "M2-arqueiro.png", "M3-espada.png"
     };
 
-    private final batalha_gladiadorService service;
+    private final UsuarioService usuarioservice;
+    private final GladiadorService gladiadorservice;
 
-    public batalha_gladiadorController(batalha_gladiadorService service){
-        this.service = service;
+    public batalha_gladiadorController(UsuarioService usuarioservice, GladiadorService gladiadorservice){
+        this.usuarioservice = usuarioservice;
+        this.gladiadorservice = gladiadorservice;
     }
 
     //Converte a coluna aparencia (1..11) no caminho da imagem servida em /img/personagens/
@@ -44,7 +48,7 @@ public class batalha_gladiadorController {
     @PostMapping("/login")
     public String entrar(@RequestParam String email, @RequestParam String senha, HttpSession session, Model model){
         try {
-            Usuario usuario = service.autenticar(email, senha);
+            Usuario usuario = usuarioservice.autenticar(email, senha);
             session.setAttribute("usuarioId", usuario.getId());
             return "redirect:/principal";
         } catch (IllegalArgumentException e) {
@@ -62,7 +66,7 @@ public class batalha_gladiadorController {
     @PostMapping("/cadastro")
     public String salvarUsuario(@ModelAttribute Usuario usuario, HttpSession session, Model model){
         try {
-            Usuario salvo = service.criarUsuario(usuario);
+            Usuario salvo = usuarioservice.criarUsuario(usuario);
             session.setAttribute("usuarioId", salvo.getId());
             return "redirect:/principal";
         } catch (IllegalArgumentException e) {
@@ -82,9 +86,9 @@ public class batalha_gladiadorController {
     @GetMapping("/principal")
     public String principal(HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        Usuario usuario = service.buscarUsuario(idDaSessao(session));
+        Usuario usuario = usuarioservice.buscarUsuario(idDaSessao(session));
         model.addAttribute("usuario", usuario);
-        model.addAttribute("destaques", service.ranking().stream().limit(3).toList());
+        model.addAttribute("destaques", gladiadorservice.ranking().stream().limit(3).toList());
         return "tela_principal";
     }
 
@@ -93,16 +97,16 @@ public class batalha_gladiadorController {
     @GetMapping("/batalha")
     public String batalha(HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("gladiadoresVivos", service.listarVivos());
+        model.addAttribute("gladiadoresVivos", gladiadorservice.listarVivos());
         return "batalha";
     }
 
     @PostMapping("/batalha")
     public String lutar(@RequestParam Long gladiadorA, @RequestParam Long gladiadorB, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("gladiadoresVivos", service.listarVivos());
+        model.addAttribute("gladiadoresVivos", gladiadorservice.listarVivos());
         try {
-            model.addAttribute("vencedor", service.batalhar(gladiadorA, gladiadorB));
+            model.addAttribute("vencedor", gladiadorservice.batalhar(gladiadorA, gladiadorB));
         } catch (IllegalArgumentException e) {
             model.addAttribute("erro", e.getMessage());
         }
@@ -114,7 +118,7 @@ public class batalha_gladiadorController {
     @GetMapping("/ranking")
     public String ranking(HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("ranking", service.ranking());
+        model.addAttribute("ranking", gladiadorservice.ranking());
         return "ranking";
     }
 
@@ -123,8 +127,8 @@ public class batalha_gladiadorController {
     @GetMapping("/usuario/{id}")
     public String resumoUsuario(@PathVariable Long id, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("usuario", service.buscarUsuario(id));
-        model.addAttribute("gladiadores", service.listarGladiadores(id));
+        model.addAttribute("usuario", usuarioservice.buscarUsuario(id));
+        model.addAttribute("gladiadores", gladiadorservice.listarGladiadores(id));
         return "tela_usuario";
     }
 
@@ -139,7 +143,7 @@ public class batalha_gladiadorController {
         List<String> imagens = new java.util.ArrayList<>();
         for (String img : IMAGENS_PERSONAGENS) imagens.add("/img/personagens/" + img);
         model.addAttribute("imagens", imagens);
-        model.addAttribute("custo", batalha_gladiadorService.CUSTO_GLADIADOR);
+        model.addAttribute("custo", batalha_gladiadorService.CUSTO_GLADIADOR); //Esse custo gladiador tem que ficar na service mesmo? Ou na Model?
         return "gladiador/novo";
     }
 
@@ -158,7 +162,7 @@ public class batalha_gladiadorController {
     @GetMapping("/gladiador/{id}")
     public String detalheGladiador(@PathVariable Long id, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("gladiador", service.pesquisarGladiador(id));
+        model.addAttribute("gladiador", gladiadorservice.pesquisarGladiador(id));
         return "gladiador/detalhe";
     }
 
@@ -166,14 +170,14 @@ public class batalha_gladiadorController {
     public String atualizarDescricao(@PathVariable Long id, @RequestParam Long usuarioId,
                                      @RequestParam String descricao, HttpSession session){
         if (!logado(session)) return "redirect:/login";
-        service.atualizarDescricao(id, descricao);
+        gladiadorservice.atualizarDescricao(id, descricao);
         return "redirect:/usuario/" + usuarioId;
     }
 
     @PostMapping("/gladiador/{id}/deletar")
     public String deletarGladiador(@PathVariable Long id, @RequestParam Long usuarioId, HttpSession session){
         if (!logado(session)) return "redirect:/login";
-        service.deletarGladiador(id);
+        gladiadorservice.deletarGladiador(id);
         return "redirect:/usuario/" + usuarioId;
     }
 

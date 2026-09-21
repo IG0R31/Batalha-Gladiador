@@ -3,20 +3,39 @@ package service;
 
 import model.Gladiador;
 import model.Usuario;
+import repository.UsuarioRepository;
+
+import java.util.List;
 
 public class GladiadorService {
 
-    Gladiador criarGladiador(Long usuarioId, Gladiador gladiador); // desconta 250 créditos
+    public Gladiador criarGladiador(Long usuarioId, Gladiador gladiador){
+        return null;
+    } // desconta 250 créditos
 
+    public List<Gladiador> listarGladiadores(Long usuarioId){
+        return null;
+    }
 
-    /*
-    List<Gladiador> listarGladiadores(Long usuarioId);
-    List<Gladiador> listarVivos();
-    Gladiador pesquisarGladiador(Long id);
-    void atualizarDescricao(Long id, String descricao);
-    void deletarGladiador(Long id);
-    Gladiador batalhar(Long idA, Long idB); // Random decide;
-    vencedor +1 vitória, perdedor MORTO
-    List<Gladiador> ranking();
-    */
+    public List<Gladiador> listarVivos(){
+        return null;
+    }
+    public Gladiador pesquisarGladiador(Long id) {
+        return null;
+    }
+    public void atualizarDescricao(Long id, String descricao){
+
+    }
+    public void deletarGladiador(Long id){
+
+    }
+    // Random decide;
+    public Gladiador batalhar(Long idA, Long idB){
+     return null;
+    }
+    //vencedor +1 vitória, perdedor MORTO
+
+    public List<Gladiador> ranking() {
+        return null;
+    }
 }
