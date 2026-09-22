@@ -25,13 +25,13 @@ public class AtributosBatalha{
     public AtributosBatalha() {
     }
 
-    AtributosBatalha(Gladiador gladiador){
+    public AtributosBatalha(Gladiador gladiador){
         double randomFactor = gladiador.getTierFactor();
         Random random = new Random();
 
-        forca = (FORCA_BASE + ((1 + (random.nextDouble(50))*randomFactor)));
-        agilidade = (AGILIDADE_BASE + (1+ (random.nextDouble(50))*randomFactor));
-        stamina = (STAMINA_BASE + ( 1+(random.nextDouble(50)*randomFactor)));
+        forca = (FORCA_BASE + (random.nextDouble(120))*randomFactor);
+        agilidade = (AGILIDADE_BASE + (random.nextDouble(65))*randomFactor);
+        stamina = (STAMINA_BASE + (random.nextDouble(80))*randomFactor);;
     }
 
     //getters and setters

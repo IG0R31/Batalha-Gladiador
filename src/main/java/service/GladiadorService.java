@@ -1,6 +1,7 @@
 package service;
 
 
+import model.AtributosBatalha;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import model.Gladiador;
@@ -41,9 +42,13 @@ public class GladiadorService {
         Optional <Usuario> usuario = usuarioRepository.findById(usuarioId);
         if(usuario.isEmpty()){throw new IllegalArgumentException("USUARIO NAO ENCONTRADO - ERRO");}
         Usuario encontrado = usuario.get();
+
         int valorGladiador = calcularValorGladiador(gladiador.getTier());
         usuarioService.subtrairCreditos(encontrado,valorGladiador); //Esse método da Service calcula se há saldo suficiente no usuario, se negativo, joga erro;
+
         gladiador.setUsuario(encontrado);
+        gladiador.setAtributos(new AtributosBatalha(gladiador));
+
         return gladiadorRepository.save(gladiador);
     }
 

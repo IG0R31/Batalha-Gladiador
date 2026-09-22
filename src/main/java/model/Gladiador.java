@@ -51,7 +51,8 @@ public class Gladiador {
         this.tier = Tier.BRONZE;
         this.status = "VIVO";
         aparencia = new Random().nextInt(11) + 1; // Numero random de 1 a 11 para definir a aparencia do gladiador
-        atributos = new AtributosBatalha(this);
+
+        //atributos = new AtributosBatalha(this); -- Quebrando o Construtor, sempre faz
     }
 
     public Long getId(){ return id; }
