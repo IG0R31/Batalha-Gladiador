@@ -17,9 +17,9 @@ public class AtributosBatalha{
     @Column(nullable = false)
     private double stamina;
 
-    private final double forcaBase =  100;
-    private final double agilidadeBase =  50;
-    private final double staminaBase =  75;
+    private static final double FORCA_BASE =  100;
+    private static final double AGILIDADE_BASE =  50;
+    private static final double STAMINA_BASE =  75;
 
     //JPA precisa do construtor sem argumentos para recriar o objeto com os valores do banco
     public AtributosBatalha() {
@@ -29,9 +29,9 @@ public class AtributosBatalha{
         double randomFactor = gladiador.getTierFactor();
         Random random = new Random();
 
-        forca = (forcaBase + ((1 + (random.nextDouble(50))*randomFactor)));
-        agilidade = (agilidadeBase + (1+ (random.nextDouble(50))*randomFactor));
-        stamina = (staminaBase + ( 1+(random.nextDouble(50)*randomFactor)));
+        forca = (FORCA_BASE + ((1 + (random.nextDouble(50))*randomFactor)));
+        agilidade = (AGILIDADE_BASE + (1+ (random.nextDouble(50))*randomFactor));
+        stamina = (STAMINA_BASE + ( 1+(random.nextDouble(50)*randomFactor)));
     }
 
     //getters and setters

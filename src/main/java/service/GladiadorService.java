@@ -1,17 +1,22 @@
 package service;
 
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import model.Gladiador;
 import model.Usuario;
 import repository.UsuarioRepository;
 import repository.GladiadorRepository;
 import service.UsuarioService;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
 
+@Service
 public class GladiadorService {
 
     private final UsuarioService usuarioService;
@@ -31,6 +36,7 @@ public class GladiadorService {
 
     Random random = new Random();
 
+    @Transactional
     public Gladiador criarGladiador(Long usuarioId, Gladiador gladiador){
         Optional <Usuario> usuario = usuarioRepository.findById(usuarioId);
         if(usuario.isEmpty()){throw new IllegalArgumentException("USUARIO NAO ENCONTRADO - ERRO");}
@@ -42,11 +48,11 @@ public class GladiadorService {
     }
 
     public List<Gladiador> listarGladiadores(Long usuarioId){
-        return null;
+        return gladiadorRepository.findByUsuarioId(usuarioId);
     }
 
     public List<Gladiador> listarVivos(){
-        return null;
+        return gladiadorRepository.findByStatus("VIVO");
     }
     public Gladiador pesquisarGladiador(Long id) {
         Optional<Gladiador> gladiador = gladiadorRepository.findById(id);
@@ -65,7 +71,7 @@ public class GladiadorService {
     gladiadorRepository.deleteById(id);
     }
 
-    // Random decide;
+    @Transactional
     public Gladiador batalhar(Long idA, Long idB){
      Gladiador Glad1 = pesquisarGladiador(idA);
      Gladiador Glad2 = pesquisarGladiador(idB);
@@ -93,7 +99,23 @@ public class GladiadorService {
     //vencedor +1 vitória, perdedor MORTO
 
     public List<Gladiador> ranking() {
-        return null;
+        return gladiadorRepository.findByOrderByBatalhasVencidasDesc();
+    }
+
+    //Busca gladiadores por parte do nome (global, todos os usuários)
+    public List<Gladiador> pesquisarPorNome(String nome){
+        if (nome == null || nome.isBlank()){
+            throw new IllegalArgumentException("Digite um nome para pesquisar.");
+        }
+        return gladiadorRepository.findByNomeContainingIgnoreCase(nome.trim());
+    }
+
+    public Map<Gladiador.Tier, Integer> valoresPorTier(){
+        Map<Gladiador.Tier, Integer> valores = new EnumMap<>(Gladiador.Tier.class);
+        for (Gladiador.Tier tier : Gladiador.Tier.values()){
+            valores.put(tier, calcularValorGladiador(tier));
+        }
+        return valores;
     }
 
     public int calcularValorGladiador (Gladiador.Tier tier){

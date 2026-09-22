@@ -9,8 +9,14 @@ import jakarta.persistence.*;
 @Table(name="gladiador")
 public class Gladiador {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    public static final String[] IMAGENS = {
+            "F1-arqueira.png", "F1-espada.png", "F1-lutadora.png", "F1-standart.png",
+            "F2-arqueira.png", "F2-espada.png", "F2-lutadora.png", "F2-standart.png",
+            "M1-lutador.png", "M2-arqueiro.png", "M3-espada.png"
+    };
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -87,6 +93,12 @@ public class Gladiador {
 
     public int getAparencia(){return aparencia;}
     public void setAparencia(int aparencia){this.aparencia = aparencia;}
+
+    @Transient
+    public String getImagem(){
+        int indice = Math.min(Math.max(aparencia, 1), IMAGENS.length) - 1;
+        return "/img/personagens/" + IMAGENS[indice];
+    }
 
     public Tier getTier(){return tier;}
     public void setTier(Tier tier){this.tier = tier;}
