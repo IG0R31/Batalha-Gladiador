@@ -26,7 +26,7 @@
 
 <div class="container py-5" style="max-width: 720px;">
     <div class="card shadow mb-4">
-        <img th:src="${@batalha_gladiadorController.imagemDe(gladiador.aparencia)}" class="card-img-top" alt="Gladiador">
+        <img th:src="${gladiador.imagem}" class="card-img-top" alt="Gladiador">
         <div class="card-body">
             <h1 class="titulo-detalhe card-title" th:text="${gladiador.nome}">Nome</h1>
             <p class="card-text" th:text="${gladiador.descricao}">Descrição</p>

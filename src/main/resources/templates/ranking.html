@@ -87,7 +87,7 @@
                     <span class="badge mb-2"
                           th:classappend="${stat.index == 0} ? 'text-bg-warning' : (${stat.index == 1} ? 'text-bg-secondary' : 'text-bg-danger')"
                           th:text="${stat.count} + 'º LUGAR'">1º LUGAR</span>
-                    <img th:src="${@batalha_gladiadorController.imagemDe(g.aparencia)}" class="podio-avatar my-2" alt="Gladiador no pódio">
+                    <img th:src="${g.imagem}" class="podio-avatar my-2" alt="Gladiador no pódio">
                     <h5 class="card-title mb-1" th:text="${g.nome}">Nome</h5>
                     <p class="card-text text-body-secondary mb-0" th:text="${g.descricao}">Descrição</p>
                 </div>
@@ -115,7 +115,7 @@
                 <tr th:each="g, stat : ${ranking}" th:classappend="${stat.index == 0} ? 'table-warning'">
                     <th scope="row"><span class="badge text-bg-warning" th:text="${stat.count}">1</span></th>
                     <td>
-                        <img th:src="${@batalha_gladiadorController.imagemDe(g.aparencia)}" class="table-avatar me-2" alt="Gladiador">
+                        <img th:src="${g.imagem}" class="table-avatar me-2" alt="Gladiador">
                         <span th:text="${g.nome}">Nome</span>
                     </td>
                     <td class="text-center"><span class="badge text-bg-success rounded-pill" th:text="${g.batalhasVencidas}">0</span></td>

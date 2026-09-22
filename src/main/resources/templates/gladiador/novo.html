@@ -88,7 +88,7 @@
         <div class="col-md-6">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <img th:src="${@batalha_gladiadorController.imagemDe(4)}" class="avatar-usuario my-2" alt="Avatar do usuário">
+                    <img th:src="${avatar}" class="avatar-usuario my-2" alt="Avatar do usuário">
                     <h5 class="card-title mb-1" th:text="${usuario.nome}">Mestre da Arena</h5>
                     <p class="card-text text-body-secondary mb-2" th:text="${usuario.email}">mestre@uel.com</p>
                 </div>
@@ -116,7 +116,11 @@
                     <select class="form-select" id="tierExample1" th:field="*{tier}">
                         <option th:each="t : ${tiers}" th:value="${t}" th:text="${t}">BRONZE</option>
                     </select>
-                    <div class="form-text">O tier define o fator aleatório dos atributos de batalha. Custo: <span th:text="${custo}">250</span> créditos.</div>
+                    <div class="form-text">
+                        O tier define o fator aleatório dos atributos de batalha. Custo:
+                        <span th:each="v : ${valores}" th:text="(${v.key} + ' ' + ${v.value} + 'cr') + (${vStat.last} ? '' : ' · ')">BRONZE 250</span>
+                        créditos, conforme o tier escolhido.
+                    </div>
                 </div>
 
                 <fieldset class="mb-3">
