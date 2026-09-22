@@ -16,13 +16,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class batalha_gladiadorController {
 
-    //Imagens de personagem disponíveis para escolher a aparência
-    //O índice (1..11) é o valor gravado na coluna aparencia
-    private static final String[] IMAGENS_PERSONAGENS = {
-            "F1-arqueira.png", "F1-espada.png", "F1-lutadora.png", "F1-standart.png",
-            "F2-arqueira.png", "F2-espada.png", "F2-lutadora.png", "F2-standart.png",
-            "M1-lutador.png", "M2-arqueiro.png", "M3-espada.png"
-    };
+    private static final String AVATAR_USUARIO = "/img/personagens/" + Gladiador.IMAGENS[3];
 
     private final UsuarioService usuarioservice;
     private final GladiadorService gladiadorservice;
@@ -32,10 +26,10 @@ public class batalha_gladiadorController {
         this.gladiadorservice = gladiadorservice;
     }
 
-    //Converte a coluna aparencia (1..11) no caminho da imagem servida em /img/personagens/
-    public String imagemDe(int aparencia){
-        int indice = Math.min(Math.max(aparencia, 1), IMAGENS_PERSONAGENS.length) - 1;
-        return "/img/personagens/" + IMAGENS_PERSONAGENS[indice];
+    private List<String> imagensPersonagens(){
+        List<String> imagens = new java.util.ArrayList<>();
+        for (String img : Gladiador.IMAGENS) imagens.add("/img/personagens/" + img);
+        return imagens;
     }
 
     // ---------- Login / Cadastro ----------
@@ -129,6 +123,7 @@ public class batalha_gladiadorController {
         if (!logado(session)) return "redirect:/login";
         model.addAttribute("usuario", usuarioservice.buscarUsuario(id));
         model.addAttribute("gladiadores", gladiadorservice.listarGladiadores(id));
+        model.addAttribute("avatar", AVATAR_USUARIO);
         return "tela_usuario";
     }
 
@@ -138,13 +133,12 @@ public class batalha_gladiadorController {
     public String novoGladiador(@PathVariable Long usuarioId, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
         model.addAttribute("gladiador", new Gladiador());
-        model.addAttribute("usuario", service.buscarUsuario(usuarioId));
+        model.addAttribute("usuario", usuarioservice.buscarUsuario(usuarioId));
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("tiers", Gladiador.Tier.values());
-        List<String> imagens = new java.util.ArrayList<>();
-        for (String img : IMAGENS_PERSONAGENS) imagens.add("/img/personagens/" + img);
-        model.addAttribute("imagens", imagens);
-        model.addAttribute("custo", batalha_gladiadorService.CUSTO_GLADIADOR); //Esse custo gladiador tem que ficar na service mesmo? Ou na Model?
+        model.addAttribute("valores", gladiadorservice.valoresPorTier());
+        model.addAttribute("imagens", imagensPersonagens());
+        model.addAttribute("avatar", AVATAR_USUARIO);
         return "gladiador/novo";
     }
 
@@ -152,19 +146,18 @@ public class batalha_gladiadorController {
     public String salvarGladiador(@PathVariable Long usuarioId, @ModelAttribute Gladiador gladiador, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
         try {
-            service.criarGladiador(usuarioId, gladiador);
+            gladiadorservice.criarGladiador(usuarioId, gladiador);
             return "redirect:/usuario/" + usuarioId;
         } catch (IllegalArgumentException e) {
             //reabre o formulário com os mesmos dados do GET + a mensagem de erro
             model.addAttribute("erro", e.getMessage());
             model.addAttribute("gladiador", gladiador);
-            model.addAttribute("usuario", service.buscarUsuario(usuarioId));
+            model.addAttribute("usuario", usuarioservice.buscarUsuario(usuarioId));
             model.addAttribute("usuarioId", usuarioId);
             model.addAttribute("tiers", Gladiador.Tier.values());
-            List<String> imagens = new java.util.ArrayList<>();
-            for (String img : IMAGENS_PERSONAGENS) imagens.add("/img/personagens/" + img);
-            model.addAttribute("imagens", imagens);
-            model.addAttribute("custo", batalha_gladiadorService.CUSTO_GLADIADOR);
+            model.addAttribute("valores", gladiadorservice.valoresPorTier());
+            model.addAttribute("imagens", imagensPersonagens());
+            model.addAttribute("avatar", AVATAR_USUARIO);
             return "gladiador/novo";
         }
     }
@@ -199,7 +192,7 @@ public class batalha_gladiadorController {
         if (!logado(session)) return "redirect:/login";
         model.addAttribute("termo", q);
         try {
-            model.addAttribute("resultados", service.pesquisarPorNome(q));
+            model.addAttribute("resultados", gladiadorservice.pesquisarPorNome(q));
         } catch (IllegalArgumentException e) {
             model.addAttribute("erro", e.getMessage());
         }
