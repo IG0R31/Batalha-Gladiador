@@ -118,7 +118,7 @@
                     </select>
                     <div class="form-text">
                         O tier define o fator aleatório dos atributos de batalha. Custo:
-                        <span th:each="v : ${valores}" th:text="(${v.key} + ' ' + ${v.value} + 'cr') + (${vStat.last} ? '' : ' · ')">BRONZE 250</span>
+                        <span th:each="v, vStat : ${valores}" th:text="(${v.key} + ' ' + ${v.value} + 'cr') + (${vStat.last} ? '' : ' · ')">BRONZE 250</span>
                         créditos, conforme o tier escolhido.
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                         <div class="col" th:each="img, stat : ${imagens}">
                             <label class="d-block text-center">
                                 <input type="radio" name="aparencia" th:value="${stat.count}" th:checked="${stat.first}" class="form-check-input mb-2">
-                                <img th:src="'imagens/Gladiadores_Rogue/' + ${i} + '.png'" class="img-escolha d-block mx-auto" alt="Aparência">
+                                <img th:src="${img}" class="img-escolha d-block mx-auto" alt="Aparência">
                             </label>
                         </div>
                     </div>
