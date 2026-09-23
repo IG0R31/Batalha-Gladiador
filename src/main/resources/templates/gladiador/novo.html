@@ -122,14 +122,14 @@
                         créditos, conforme o tier escolhido.
                     </div>
                 </div>
-
+<!--Adicionando rota de aparencia da biblioteca-->
                 <fieldset class="mb-3">
                     <legend class="form-label">Aparência</legend>
                     <div class="row row-cols-3 row-cols-md-4 g-3">
                         <div class="col" th:each="img, stat : ${imagens}">
                             <label class="d-block text-center">
                                 <input type="radio" name="aparencia" th:value="${stat.count}" th:checked="${stat.first}" class="form-check-input mb-2">
-                                <img th:src="${img}" class="img-escolha d-block mx-auto" alt="Aparência">
+                                <img th:src="'imagens/Gladiadores_Rogue/' + ${i} + '.png'" class="img-escolha d-block mx-auto" alt="Aparência">
                             </label>
                         </div>
                     </div>
