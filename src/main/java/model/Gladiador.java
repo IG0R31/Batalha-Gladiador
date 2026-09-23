@@ -12,11 +12,17 @@ public class Gladiador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public static final String[] IMAGENS = {
-            "F1-arqueira.png", "F1-espada.png", "F1-lutadora.png", "F1-standart.png",
-            "F2-arqueira.png", "F2-espada.png", "F2-lutadora.png", "F2-standart.png",
-            "M1-lutador.png", "M2-arqueiro.png", "M3-espada.png"
-    };
+    //Aparências do pacote Gladiadores_Rogue, servidas de static/img/Gladiadores_Rogue (1.png a 34.png)
+    public static final String PASTA_IMAGENS = "/img/Gladiadores_Rogue/";
+    public static final int TOTAL_IMAGENS = 34;
+
+    public static final String[] IMAGENS = construirImagens();
+
+    private static String[] construirImagens(){
+        String[] imagens = new String[TOTAL_IMAGENS];
+        for (int i = 0; i < TOTAL_IMAGENS; i++) imagens[i] = (i + 1) + ".png";
+        return imagens;
+    }
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -50,7 +56,7 @@ public class Gladiador {
         this.batalhasVencidas = 0;
         this.tier = Tier.BRONZE;
         this.status = "VIVO";
-        aparencia = new Random().nextInt(11) + 1; // Numero random de 1 a 11 para definir a aparencia do gladiador
+        aparencia = new Random().nextInt(TOTAL_IMAGENS) + 1; // Numero random de 1 a 34 para definir a aparencia do gladiador
 
         //atributos = new AtributosBatalha(this); -- Quebrando o Construtor, sempre faz
     }
@@ -98,7 +104,7 @@ public class Gladiador {
     @Transient
     public String getImagem(){
         int indice = Math.min(Math.max(aparencia, 1), IMAGENS.length) - 1;
-        return "/img/personagens/" + IMAGENS[indice];
+        return PASTA_IMAGENS + IMAGENS[indice];
     }
 
     public Tier getTier(){return tier;}

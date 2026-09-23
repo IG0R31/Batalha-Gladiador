@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class batalha_gladiadorController {
 
-    private static final String AVATAR_USUARIO = "/img/personagens/" + Gladiador.IMAGENS[3];
+    private static final String AVATAR_USUARIO = Gladiador.PASTA_IMAGENS + Gladiador.IMAGENS[3];
 
     private final UsuarioService usuarioservice;
     private final GladiadorService gladiadorservice;
@@ -28,7 +28,7 @@ public class batalha_gladiadorController {
 
     private List<String> imagensPersonagens(){
         List<String> imagens = new java.util.ArrayList<>();
-        for (String img : Gladiador.IMAGENS) imagens.add("/img/personagens/" + img);
+        for (String img : Gladiador.IMAGENS) imagens.add(Gladiador.PASTA_IMAGENS + img);
         return imagens;
     }
 
