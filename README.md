@@ -31,7 +31,9 @@ Empacotamento `war`; roda com Tomcat embarcado via `./mvnw spring-boot:run`.
 ```
 src/main/java/
 ├── controller/batalha_gladiadorController.java   # Rotas MVC + sessão de login
-├── service/batalha_gladiadorService.java         # Regras do jogo
+├── service/
+│   ├── UsuarioService.java                       # Cadastro, login e créditos
+│   └── GladiadorService.java                     # Regras do jogo (criar, batalhar, ranking)
 ├── model/                                        # Entidades JPA (mapeiam as tabelas)
 │   ├── Usuario.java            (@Entity → tabela usuario)
 │   ├── Gladiador.java          (@Entity → tabela gladiador, com enum interno Tier)
@@ -43,7 +45,9 @@ src/main/java/
 src/main/resources/
 ├── application.properties                        # Conexão MySQL
 ├── templates/                                    # Telas (Thymeleaf)
-└── static/img/                                   # Imagens (personagens + carrossel)
+└── static/img/                                   # Imagens (aparencias + carrossel)
+    ├── Gladiadores_Rogue/                        # 1.png a 34.png (aparências)
+    └── carrosel/                                 # Imagens do carrossel da tela principal
 ```
 
 A controller não conhece SQL — toda regra passa pelo service, que acessa o banco pelos repositories.
@@ -79,7 +83,7 @@ CREATE TABLE gladiador(
 
 Detalhes de projeto:
 - Os atributos de batalha são **sorteados uma única vez**, na criação (o tier define o fator aleatório). Depois, o banco é a fonte da verdade — carregar o gladiador não re-sorteia nada.
-- A coluna `aparencia` (1–11) mapeia para uma imagem em `static/img/personagens/` (conversão no helper `imagemDe()` da controller).
+- A coluna `aparencia` (1–34) mapeia para uma imagem em `static/img/Gladiadores_Rogue/` (conversão no helper `getImagem()` da entidade `Gladiador`; valores fora da faixa são limitados ao intervalo).
 - `status` é `String` (`"VIVO"`/`"MORTO"`) mapeando o ENUM do banco.
 
 ---
@@ -92,7 +96,7 @@ Detalhes de projeto:
 - **Créditos:** saldo inicial de **1000**; montar um gladiador custa **250** (descontado no service, com verificação de saldo)
 
 ### Gladiadores (CRUD)
-- **Criar** — formulário com nome, descrição, tier (BRONZE/PRATA/OURO/PLATINA) e escolha de aparência
+- **Criar** — formulário com nome, descrição, tier (BRONZE/PRATA/OURO/PLATINA) e escolha de aparência entre as **34 imagens do pacote Gladiadores_Rogue** (radio com o índice 1–34; sem escolha, a aparência é sorteada de 1 a 34 na criação)
 - **Pesquisar** — barra de pesquisa por parte do nome (`findByNomeContainingIgnoreCase`), busca global
 - **Atualizar** — apenas a descrição (regra do projeto), pela tela de detalhe do gladiador
 - **Deletar** — pela tela do usuário ou de detalhe
@@ -140,9 +144,9 @@ poder = forca + agilidade + stamina + random.nextDouble(50);
 - [x] Entidades JPA mapeando o schema
 - [x] Repositories (`UsuarioRepository`, `GladiadorRepository`)
 - [x] Controller com sessão, todas as rotas e templates
-- [ ] **Service completo** — faltam os métodos que a controller chama: `criarUsuario(Usuario)`, `autenticar`, `buscarUsuario`, `criarGladiador`, `listarGladiadores`, `listarVivos`, `pesquisarGladiador`, `atualizarDescricao`, `deletarGladiador`, `batalhar`, `ranking` (a busca por nome já consulta o banco)
-- [ ] Migrar `criarUsuario` do mapa em memória para o `UsuarioRepository`
-- [ ] Copiar imagens de `personagens/` e `Carrosel/` para `src/main/resources/static/img/`
+- [x] Services completos (`UsuarioService` e `GladiadorService`), consultando o banco pelos repositories
+- [x] Imagens servidas de `static/img/` — pacote **Gladiadores_Rogue** (34 aparências, `aparencia` 1–34) e carrossel da tela principal
+- [x] Correções nos templates: `gladiador/novo.html` (variáveis fora de escopo em `th:src` da aparência e no `th:each` dos tiers)
 - [ ] Hash de senha (hoje o login compara texto puro)
 - [ ] Tabela de `batalha` para histórico de partidas (item "Histórico" do menu)
 
