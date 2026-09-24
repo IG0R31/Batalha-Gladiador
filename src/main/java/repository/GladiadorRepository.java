@@ -13,6 +13,12 @@ public interface GladiadorRepository extends JpaRepository<Gladiador, Long> {
     //Apenas os aptos a lutar
     List<Gladiador> findByStatus(String status);
 
+    //Vivos do usuário (select "Seu Gladiador")
+    List<Gladiador> findByUsuarioIdAndStatus(Long usuarioId, String status);
+
+    //Vivos de outros usuários (select "Gladiador a Enfrentar")
+    List<Gladiador> findByStatusAndUsuarioIdNot(String status, Long usuarioId);
+
     //Ranking: maior número de batalhas vencidas primeiro
     List<Gladiador> findByOrderByBatalhasVencidasDesc();
 

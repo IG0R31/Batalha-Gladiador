@@ -91,16 +91,20 @@ public class batalha_gladiadorController {
     @GetMapping("/batalha")
     public String batalha(HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("gladiadoresVivos", gladiadorservice.listarVivos());
+        Long usuarioId = idDaSessao(session);
+        model.addAttribute("meusGladiadores", gladiadorservice.listarVivosDoUsuario(usuarioId));
+        model.addAttribute("adversarios", gladiadorservice.listarAdversariosVivos(usuarioId));
         return "batalha";
     }
 
     @PostMapping("/batalha")
     public String lutar(@RequestParam Long gladiadorA, @RequestParam Long gladiadorB, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("gladiadoresVivos", gladiadorservice.listarVivos());
+        Long usuarioId = idDaSessao(session);
+        model.addAttribute("meusGladiadores", gladiadorservice.listarVivosDoUsuario(usuarioId));
+        model.addAttribute("adversarios", gladiadorservice.listarAdversariosVivos(usuarioId));
         try {
-            model.addAttribute("vencedor", gladiadorservice.batalhar(gladiadorA, gladiadorB));
+            model.addAttribute("vencedor", gladiadorservice.batalhar(usuarioId, gladiadorA, gladiadorB));
         } catch (IllegalArgumentException e) {
             model.addAttribute("erro", e.getMessage());
         }
@@ -165,21 +169,24 @@ public class batalha_gladiadorController {
     @GetMapping("/gladiador/{id}")
     public String detalheGladiador(@PathVariable Long id, HttpSession session, Model model){
         if (!logado(session)) return "redirect:/login";
-        model.addAttribute("gladiador", gladiadorservice.pesquisarGladiador(id));
+        Gladiador gladiador = gladiadorservice.pesquisarGladiador(id);
+        model.addAttribute("gladiador", gladiador);
+        //Gladiador de outro usuário: visualização somente leitura, sem edição/deleção
+        if (!gladiador.getUsuario().getId().equals(idDaSessao(session))) return "gladiador/detalhar_outros";
         return "gladiador/detalhe";
     }
 
     @PostMapping("/gladiador/{id}/descricao")
     public String atualizarDescricao(@PathVariable Long id, @RequestParam Long usuarioId,
                                      @RequestParam String descricao, HttpSession session){
-        if (!logado(session)) return "redirect:/login";
+        if (!logado(session) || !ehDoUsuarioLogado(id, session)) return "redirect:/principal";
         gladiadorservice.atualizarDescricao(id, descricao);
         return "redirect:/usuario/" + usuarioId;
     }
 
     @PostMapping("/gladiador/{id}/deletar")
     public String deletarGladiador(@PathVariable Long id, @RequestParam Long usuarioId, HttpSession session){
-        if (!logado(session)) return "redirect:/login";
+        if (!logado(session) || !ehDoUsuarioLogado(id, session)) return "redirect:/principal";
         gladiadorservice.deletarGladiador(id);
         return "redirect:/usuario/" + usuarioId;
     }
@@ -207,5 +214,15 @@ public class batalha_gladiadorController {
 
     private Long idDaSessao(HttpSession session){
         return (Long) session.getAttribute("usuarioId");
+    }
+
+    //Verifica se o gladiador pertence ao usuário da sessão (bloqueia edição/deleção alheia)
+    private boolean ehDoUsuarioLogado(Long gladiadorId, HttpSession session){
+        try {
+            Gladiador gladiador = gladiadorservice.pesquisarGladiador(gladiadorId);
+            return gladiador.getUsuario().getId().equals(idDaSessao(session));
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }
