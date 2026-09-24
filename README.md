@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 # Batalha-Gladiador
-Projeto de batalha de Gladiadores. Estou fazendo junto com meu colega de sala João Betoni, para ler mais detalhes do projeto verifique o README.md disponível.
-=======
-# Batalha de Gladiadores
+
+Projeto de batalha de Gladiadores, feito junto com meu colega de sala João Betoni.
 
 Sistema web focado no gerenciamento, recrutamento e combate automatizado de gladiadores (*autobattler*), onde a estratégia reside na gestão de recursos e composição dos combatentes. Sem inputs dinâmicos em combate: o resultado da luta deriva dos atributos sorteados e da sorte.
 
@@ -104,9 +102,11 @@ Detalhes de projeto:
 - **Pesquisar** — barra de pesquisa por parte do nome (`findByNomeContainingIgnoreCase`), busca global
 - **Atualizar** — apenas a descrição (regra do projeto), pela tela de detalhe do gladiador
 - **Deletar** — pela tela do usuário ou de detalhe
+- **Visualização de gladiador alheio** — pela pesquisa, o gladiador de outro usuário abre em modo somente leitura (`gladiador/detalhar_outros.html`), sem editar nem deletar
 
 ### Batalha (autobattler)
-- Dois gladiadores **vivos** entram (`/batalha`); o poder de cada um é a soma dos atributos + sorte:
+- Em `/batalha`, "Seu Gladiador" lista apenas os **seus** vivos; "Gladiador a Enfrentar" lista os vivos de **outros usuários**
+- O poder de cada um é a soma dos atributos + sorte:
 
 ```java
 poder = forca + agilidade + stamina + random.nextDouble(50);
@@ -127,7 +127,8 @@ poder = forca + agilidade + stamina + random.nextDouble(50);
 | `tela_principal.html` | `/principal` | Arena: carrossel, batalha, destaques, busca |
 | `tela_usuario.html` | `/usuario/{id}` | Perfil, créditos, lista de gladiadores |
 | `gladiador/novo.html` | `/usuario/{id}/gladiador/novo` | Monte seu gladiador (form completo) |
-| `gladiador/detalhe.html` | `/gladiador/{id}` | Ficha, atributos, editar descrição, deletar |
+| `gladiador/detalhe.html` | `/gladiador/{id}` | Ficha do próprio gladiador: atributos, editar descrição, deletar |
+| `gladiador/detalhar_outros.html` | `/gladiador/{id}` | Ficha de gladiador alheio (somente leitura) |
 | `batalha.html` | `/batalha` | Seleção dos lutadores + resultado |
 | `ranking.html` | `/ranking` | Pódio + classificação completa |
 | `pesquisa.html` | `/pesquisar?q=` | Resultados da busca por nome |
@@ -151,6 +152,8 @@ poder = forca + agilidade + stamina + random.nextDouble(50);
 - [x] Services completos (`UsuarioService` e `GladiadorService`), consultando o banco pelos repositories
 - [x] Imagens servidas de `static/img/` — pacote **Gladiadores_Rogue** (34 aparências, `aparencia` 1–34) e carrossel da tela principal
 - [x] Correções nos templates: `gladiador/novo.html` (variáveis fora de escopo em `th:src` da aparência e no `th:each` dos tiers)
+- [x] Página de detalhe por propriedade (edição para o dono, leitura para os demais) + validações de posse em editar/deletar
+- [x] Batalha com listas separadas (seus vivos × vivos de outros) e validações em `batalhar`
 - [ ] Hash de senha (hoje o login compara texto puro)
 - [ ] Tabela de `batalha` para histórico de partidas (item "Histórico" do menu)
 
@@ -162,4 +165,3 @@ poder = forca + agilidade + stamina + random.nextDouble(50);
 - Derrota ≠ morte (com histórico de batalhas para revanche)
 - Subida de tier por vitórias acumuladas
 - Créditos de premiação por vitória
->>>>>>> master
