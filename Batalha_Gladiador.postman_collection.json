@@ -1,0 +1,313 @@
+{
+	"info": {
+		"name": "Batalha de Gladiadores",
+		"description": "Collection para testar as rotas MVC (Thymeleaf) do projeto.\n\nComo usar:\n1. Suba a aplicação (Tomcat embutido na 8080).\n2. Rode 'Cadastrar usuário' (cria a sessão) ou 'Login'.\n3. As rotas seguintes usam o cookie JSESSIONID salvo automaticamente pelo Postman.\n4. As respostas são páginas HTML — verifique o status code (200/302) e a aba Body para conferir a tela renderizada.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "usuarioId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "gladiadorId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "gladiadorIdB",
+			"value": "2",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Autenticação",
+			"item": [
+				{
+					"name": "Tela de login",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["login"]
+						}
+					}
+				},
+				{
+					"name": "Cadastrar usuário (loga e cria a sessão)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{ "key": "nome", "value": "Mestre da Arena" },
+								{ "key": "email", "value": "mestre@uel.br" },
+								{ "key": "senha", "value": "1234" }
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cadastro",
+							"host": ["{{baseUrl}}"],
+							"path": ["cadastro"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{ "key": "email", "value": "mestre@uel.br" },
+								{ "key": "senha", "value": "1234" }
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["login"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{baseUrl}}/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Arena",
+			"item": [
+				{
+					"name": "Tela principal",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/principal",
+							"host": ["{{baseUrl}}"],
+							"path": ["principal"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Usuário",
+			"item": [
+				{
+					"name": "Tela do usuário (resumo + gladiadores)",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/usuario/{{usuarioId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuario", "{{usuarioId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Gladiador",
+			"item": [
+				{
+					"name": "Formulário de novo gladiador",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/usuario/{{usuarioId}}/gladiador/novo",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuario", "{{usuarioId}}", "gladiador", "novo"]
+						}
+					}
+				},
+				{
+					"name": "Salvar gladiador (250-1000 créditos conforme tier)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{ "key": "nome", "value": "Espartaco" },
+								{ "key": "descricao", "value": "Lutador de espada e escudo" },
+								{ "key": "tier", "value": "BRONZE" },
+								{ "key": "aparencia", "value": "1" }
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/usuario/{{usuarioId}}/gladiador/salvar",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuario", "{{usuarioId}}", "gladiador", "salvar"]
+						},
+						"description": "tier aceita BRONZE (250cr), PRATA (350cr), OURO (600cr) e PLATINA (1000cr). aparencia vai de 1 a 11."
+					}
+				},
+				{
+					"name": "Detalhe do gladiador",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/gladiador/{{gladiadorId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["gladiador", "{{gladiadorId}}"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar descrição",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{ "key": "usuarioId", "value": "{{usuarioId}}" },
+								{ "key": "descricao", "value": "Descrição atualizada pela collection" }
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/gladiador/{{gladiadorId}}/descricao",
+							"host": ["{{baseUrl}}"],
+							"path": ["gladiador", "{{gladiadorId}}", "descricao"]
+						}
+					}
+				},
+				{
+					"name": "Deletar gladiador",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{ "key": "usuarioId", "value": "{{usuarioId}}" }
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/gladiador/{{gladiadorId}}/deletar",
+							"host": ["{{baseUrl}}"],
+							"path": ["gladiador", "{{gladiadorId}}", "deletar"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Batalha",
+			"item": [
+				{
+					"name": "Tela de batalha (lista os vivos)",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/batalha",
+							"host": ["{{baseUrl}}"],
+							"path": ["batalha"]
+						}
+					}
+				},
+				{
+					"name": "Batalhar (vencedor +1 vitória, perdedor MORTO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{ "key": "gladiadorA", "value": "{{gladiadorId}}" },
+								{ "key": "gladiadorB", "value": "{{gladiadorIdB}}" }
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/batalha",
+							"host": ["{{baseUrl}}"],
+							"path": ["batalha"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Ranking e Pesquisa",
+			"item": [
+				{
+					"name": "Ranking geral",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/ranking",
+							"host": ["{{baseUrl}}"],
+							"path": ["ranking"]
+						}
+					}
+				},
+				{
+					"name": "Pesquisar gladiador por nome",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/pesquisar?q=espartaco",
+							"host": ["{{baseUrl}}"],
+							"path": ["pesquisar"],
+							"query": [
+								{
+									"key": "q",
+									"value": "espartaco"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

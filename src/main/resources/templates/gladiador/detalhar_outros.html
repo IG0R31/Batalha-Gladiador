@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalha de Gladiadores - Gladiador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { min-height: 100vh; background: #cdedb3; }
+        .titulo-detalhe{
+            font-family: "EB Garamond", Garamond, serif;
+            font-weight: 700;
+        }
+        .card-img-top{ height: 260px; object-fit: contain; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/principal}">BATALHA DE GLADIADORES</a>
+    </div>
+</nav>
+
+<div class="container py-5" style="max-width: 720px;">
+    <div class="card shadow mb-4">
+        <img th:src="${gladiador.imagem}" class="card-img-top" alt="Gladiador">
+        <div class="card-body">
+            <h1 class="titulo-detalhe card-title" th:text="${gladiador.nome}">Nome</h1>
+            <p class="card-text" th:text="${gladiador.descricao}">Descrição</p>
+            <div class="mb-3">
+                <span class="badge text-bg-warning" th:text="${gladiador.tier}">BRONZE</span>
+                <span class="badge" th:classappend="${gladiador.status == 'VIVO'} ? 'text-bg-success' : 'text-bg-danger'" th:text="${gladiador.status}">VIVO</span>
+                <span class="badge text-bg-light border">Batalhas vencidas: <span th:text="${gladiador.batalhasVencidas}">0</span></span>
+            </div>
+
+            <!-- Atributos de batalha (sorteados na criação, conforme o tier).
+                 São exatamente estes três valores que a batalha compara (com fator de sorte). -->
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between">Força <strong th:text="${#numbers.formatDecimal(gladiador.atributos.forca, 1, 1)}">100</strong></li>
+                <li class="list-group-item d-flex justify-content-between">Agilidade <strong th:text="${#numbers.formatDecimal(gladiador.atributos.agilidade, 1, 1)}">50</strong></li>
+                <li class="list-group-item d-flex justify-content-between">Stamina <strong th:text="${#numbers.formatDecimal(gladiador.atributos.stamina, 1, 1)}">75</strong></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</body>
+</html>

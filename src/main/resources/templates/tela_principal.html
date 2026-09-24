@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalha de Gladiadores - Arena</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .tela-boas-vindas{
+            background-color: #cdbde3;
+        }
+        .titulo-boas-vindas{
+            font-family: "EB Garamond", Garamond, serif;
+            font-weight: 700;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+        }
+        .titulo-secao{
+            font-family: "EB Garamond", Garamond, serif;
+            font-weight: 700;
+        }
+        .card-img-top{
+            height: 220px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+ <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/principal}">BATALHA DE GLADIADORES</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/IG0R31/Batalha-Gladiador.git">Github</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Verificar
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" th:href="@{/ranking}">Ranking Geral</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" th:href="@{/usuario/{id}(id=${usuario.id})}">Gladiadores</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">versão 1.2</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search" th:action="@{/pesquisar}" method="get">
+        <input class="form-control me-2" type="search" name="q" placeholder="Pesquisar" aria-label="Pesquisar"/>
+        <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+      </form>
+      <form th:action="@{/logout}" method="post" class="ms-2">
+        <button class="btn btn-outline-danger" type="submit">Sair</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div class="tela-boas-vindas py-5">
+    <div class="row justify-content-center">
+        <div class="col-sm-8 col-md-6">
+            <p class="titulo-boas-vindas text-center mb-4">BEM VINDO DE VOLTA <span th:text="${usuario.nome}">MESTRE</span></p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div id="carouselExampleDark" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="10000">
+                        <img th:src="@{/img/carrosel/monte_personagem.png}" class="d-block w-100" alt="Monte o seu personagem">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                        <img th:src="@{/img/carrosel/lute_contra.png}" class="d-block w-100" alt="Lute contra outros">
+                    </div>
+                    <div class="carousel-item">
+                        <img th:src="@{/img/carrosel/acompanhe_ranking.png}" class="d-block w-100" alt="Ranking">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a class="btn btn-outline-success btn-lg px-5" th:href="@{/batalha}">BATALHAR!</a>
+    </div>
+</div>
+
+<div class="container py-4">
+<!-- Personagens base para teste -->
+    <h2 class="titulo-secao mb-4 text-center">Destaques</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="g : ${destaques}">
+            <div class="card h-100">
+                <img th:src="${g.imagem}" class="card-img-top" alt="Gladiador em destaque">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${g.nome}">Nome</h5>
+                    <p class="card-text" th:text="${g.descricao}">Descrição</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">Batalhas vencidas: <span th:text="${g.batalhasVencidas}">0</span></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</body>
+</html>
