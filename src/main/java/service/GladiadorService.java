@@ -59,6 +59,16 @@ public class GladiadorService {
     public List<Gladiador> listarVivos(){
         return gladiadorRepository.findByStatus("VIVO");
     }
+
+    //Vivos do próprio usuário ("Seu Gladiador")
+    public List<Gladiador> listarVivosDoUsuario(Long usuarioId){
+        return gladiadorRepository.findByUsuarioIdAndStatus(usuarioId, "VIVO");
+    }
+
+    //Vivos de outros usuários ("Gladiador a Enfrentar")
+    public List<Gladiador> listarAdversariosVivos(Long usuarioId){
+        return gladiadorRepository.findByStatusAndUsuarioIdNot("VIVO", usuarioId);
+    }
     public Gladiador pesquisarGladiador(Long id) {
         Optional<Gladiador> gladiador = gladiadorRepository.findById(id);
         if(gladiador.isEmpty()){throw new IllegalArgumentException("GLADIADOR NAO ENCONTRADO");}
@@ -77,9 +87,13 @@ public class GladiadorService {
     }
 
     @Transactional
-    public Gladiador batalhar(Long idA, Long idB){
+    public Gladiador batalhar(Long usuarioId, Long idA, Long idB){
+     if (idA.equals(idB)) throw new IllegalArgumentException("ESCOLHA DOIS GLADIADORES DIFERENTES");
      Gladiador Glad1 = pesquisarGladiador(idA);
      Gladiador Glad2 = pesquisarGladiador(idB);
+     //"Seu Gladiador" deve ser seu; o adversário, de outro usuário
+     if (!Glad1.getUsuario().getId().equals(usuarioId)) throw new IllegalArgumentException("VOCE SO PODE LUTAR COM UM GLADIADOR SEU");
+     if (Glad2.getUsuario().getId().equals(usuarioId)) throw new IllegalArgumentException("O ADVERSARIO DEVE SER DE OUTRO USUARIO");
      double glad1Range = (random.nextDouble(Glad1.getAtributos().getStatSum()))*(1+Glad1.getTierFactor());
      double glad2Range = (random.nextDouble(Glad2.getAtributos().getStatSum()))*(1+Glad2.getTierFactor());
 
