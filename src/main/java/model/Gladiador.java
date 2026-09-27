@@ -98,8 +98,9 @@ public class Gladiador {
     public String getStatus(){ return status; }
     public void setStatus(String status){ this.status = status; }
 
-    public int getAparencia(){return aparencia;}
-    public void setAparencia(int aparencia){this.aparencia = aparencia;}
+//Esse código não precisou ser usado pois a APARENCIA nao é alterada.
+//    public int getAparencia(){return aparencia;}
+//    public void setAparencia(int aparencia){this.aparencia = aparencia;}
 
     @Transient
     public String getImagem(){
