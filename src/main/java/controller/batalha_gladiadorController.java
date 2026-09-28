@@ -38,8 +38,6 @@ public class batalha_gladiadorController {
     public String redirect(){
         return "redirect:/login";
     }
-    @GetMapping("/index")
-    public String index(){}
     // ---------- Login / Cadastro ----------
 
     @GetMapping("/login")
